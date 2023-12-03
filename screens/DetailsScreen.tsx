@@ -95,7 +95,7 @@ function DetailsScreen({ navigation }) {
 
 
 
-    const [lista,setLista] = useState([])
+    const [lista,setLista] = useState<Array<{card:{}, graph:[]}>>([])
 
     const [graphs,setGraphs] = useState([])
 
@@ -120,48 +120,47 @@ function DetailsScreen({ navigation }) {
 
                   }
                 });
-                let docs = []
                 let resultadosLista = []
                 let graphValues= []
-                dispositivos.map((dispositivo)=>{
+                const queryData =[]
+                dispositivos.map(async (dispositivo,index)=>{
                     try{
-                         getDocs(collection(db, "a0", "b0",dispositivo)).then((query)=>{
-                             query.forEach((doc)=>{
-                                 const {IP,IRMS,Potencia,Caudal,Volumen,Consumo,myDouble3} = doc.data()
-                                 docs.push({
-                                     Caudal,
-                                     Volumen,
-                                     Consumo,
-                                     IP,
-                                     IRMS,
-                                     Potencia,
-                                     myDouble3,
-                                 })
+
+                       const query =  await getDocs(collection(db, "a0", "b0",dispositivo))
+
+                        let docs = []
+                        query.forEach((doc)=>{
+                            const {IP,IRMS,Potencia,Caudal,Volumen,Consumo,myDouble3} = doc.data()
+                            docs.push({
+                                Caudal,
+                                Volumen,
+                                Consumo,
+                                IP,
+                                IRMS,
+                                Potencia,
+                                myDouble3,
+                            })
+                        })
+
+                        const resultado = [docs.reduce((acum,item)=>{
+                            if(item.myDouble3>acum.myDouble3){
+                                acum = item
+                            }
+                            return acum
+                        },docs[0])]
 
 
 
+                        const sortValues = docs.sort((a,b)=> b.myDouble3-a.myDouble3).slice(0,10)
+
+                        const sortValues2 = sortValues.sort((a,b)=> a.myDouble3-b.myDouble3)
+                        resultadosLista.push({
+                            card:resultado[0],
+                            graph: sortValues2
+                        })
+                        setLista(resultadosLista)
 
 
-                             })
-                             const resultado = [docs.reduce((acum,item)=>{
-                                 if(item.myDouble3>acum.myDouble3){
-                                     acum = item
-                                 }
-                                 return acum
-                             },docs[0])]
-
-
-                             const sortValues = docs.sort((a,b)=> b.myDouble3-a.myDouble3).slice(0,10)
-
-                             const sortValues2 = sortValues.sort((a,b)=> a.myDouble3-b.myDouble3)
-
-                             setGraphs([...graphs,sortValues2])
-                             setLista([...lista,resultado[0]])
-
-
-                             docs = []
-
-                         });
                     }catch (e){
                         console.log(e)
                     }
@@ -185,14 +184,15 @@ function DetailsScreen({ navigation }) {
         }
         setInterval(()=>getLista(),5000)
     },[])
-
+    console.log(lista)
 
 
 
     return (
         <View style={tw`bg-red-50`}>
       <View style={tw`flex flex-row flex-wrap justify-center items-center py-4`}>
-        {lista && lista.map((card,index)=><CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
+        {lista && lista.map(({card,graph},index)=><>
+            <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
             {
                 title:'Corriente',
                 readValue: card.IP,
@@ -218,45 +218,45 @@ function DetailsScreen({ navigation }) {
 
 
 
-        }/>)}
-          {graphs && graphs.map((graph)=>(
-              <LineChart
-                  data={{
-                      labels: graph.map(item=>item.myDouble3),
-                      datasets: [
-                          {
-                              data: graph.map(item=>item.IRMS)
-                          }
-                      ]
-                  }}
-                  width={Dimensions.get("window").width} // from react-native
-                  height={220}
-                  yAxisLabel=""
-                  yAxisSuffix="mA"
-                  yAxisInterval={1} // optional, defaults to 1
-                  chartConfig={{
-                      backgroundColor: "#F7F9F9",
-                      backgroundGradientFrom: "#F7F9F9",
-                      backgroundGradientTo: "#F7F9F9",
-                      decimalPlaces: 2, // optional, defaults to 2dp
-                      color: (opacity = 1) => "yellow",
-                      labelColor: (opacity = 1) => "black",
-                      style: {
-                          borderRadius: 16
-                      },
-                      propsForDots: {
-                          r: "6",
-                          strokeWidth: "2",
-                          stroke: "#ffa726"
-                      }
-                  }}
-                  bezier
-                  style={{
-                      marginVertical: 8,
-                      borderRadius:16
-                  }}
-              />
-          ))}
+        }/>
+            <LineChart
+                data={{
+                    labels: graph.map(item=>item.myDouble3),
+                    datasets: [
+                        {
+                            data: graph.map(item=>item.IRMS)
+                        }
+                    ]
+                }}
+                width={Dimensions.get("window").width} // from react-native
+                height={220}
+                yAxisLabel=""
+                yAxisSuffix="mA"
+                yAxisInterval={1} // optional, defaults to 1
+                chartConfig={{
+                    backgroundColor: "#F7F9F9",
+                    backgroundGradientFrom: "#F7F9F9",
+                    backgroundGradientTo: "#F7F9F9",
+                    decimalPlaces: 2, // optional, defaults to 2dp
+                    color: (opacity = 1) => "yellow",
+                    labelColor: (opacity = 1) => "black",
+                    style: {
+                        borderRadius: 16
+                    },
+                    propsForDots: {
+                        r: "6",
+                        strokeWidth: "2",
+                        stroke: "#ffa726"
+                    }
+                }}
+                bezier
+                style={{
+                    marginVertical: 8,
+                    borderRadius:16
+                }}
+            />
+        </>)}
+
       </View>
         <View>
         <Text></Text>
