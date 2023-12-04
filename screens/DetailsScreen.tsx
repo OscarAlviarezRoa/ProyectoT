@@ -203,56 +203,55 @@ function DetailsScreen({ navigation }) {
 
     return (
         <View style={tw`flex-1 bg-red-50`}>
-            <View style={tw`flex flex-row flex-wrap justify-center items-center py-4`}>
+            <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
                 {lista && lista.map(({card,graph,dispositivoId},index)=><>
                     <View style={tw`flex flex-row  justify-evenly py-2`}>
-                        <View style={tw`flex flex-col`}>
-                            <View style={tw`py-1`}>
-                                <Button  color="#F08080" title="Encender"
-                                         onPress = {()=>OnButton(dispositivoId)}
-                                />
+                        <View style={tw`flex flex-row justify-evenly`}>
+                            <View>
+                                <View style={tw`py-1`}>
+                                    <Button  color="#F08080" title="Encender"
+                                             onPress = {()=>OnButton(dispositivoId)}
+                                    />
+                                </View>
+
+                                <View style={tw`py-1`}>
+                                    <Button color="#F08080" title="Apagar"
+                                            onPress = {()=>OffButton(dispositivoId)}
+                                    />
+                                </View>
                             </View>
 
-                            <View style={tw`py-1`}>
-                                <Button color="#F08080" title="Apagar"
-                                        onPress = {()=>OffButton(dispositivoId)}
-                                />
-                            </View>
-
-                        </View>
-                        <View>
                             <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
-                                    {
-                                        title:'Corriente',
-                                        readValue: card.IP,
-                                        isPositive: true,
+                                {
+                                    title:'Corriente',
+                                    readValue: card.IP,
+                                    isPositive: true,
 
-                                    },
-                                    {
-                                        title:'Potencia',
-                                        readValue:card.IRMS,
-                                        isPositive: true,
-                                    },
-                                    {
-                                        title:'Consumo',
-                                        readValue:card.Potencia,
-                                        isPositive: null,
-                                    },
-                                    {
-                                        title:'Consumo Periodo',
-                                        readValue:card.myDouble3,
-                                        isPositive: null,
-                                    }
-                                ]
-
-
+                                },
+                                {
+                                    title:'Potencia',
+                                    readValue:card.IRMS,
+                                    isPositive: true,
+                                },
+                                {
+                                    title:'Consumo',
+                                    readValue:card.Potencia,
+                                    isPositive: null,
+                                },
+                                {
+                                    title:'Consumo Periodo',
+                                    readValue:card.myDouble3,
+                                    isPositive: null,
+                                }
+                            ]
 
 
-                        }/>
+
+
+                            }/>
                         </View>
+
                     </View>
-
-
 
                     <LineChart
                         data={{
@@ -295,7 +294,7 @@ function DetailsScreen({ navigation }) {
                 </>)}
 
             </View>
-            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] `}>
+            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
                 <Button
                     color="#F08080"
                     title="Estadisticas"
@@ -310,7 +309,6 @@ function DetailsScreen({ navigation }) {
                     style={tw`mb-2`}
                 />
             </View>
-
         </View>
     );
 }

@@ -209,7 +209,7 @@ function DetailScreen({ navigation }) {
 
     return (
         <View style={tw`flex-1 bg-red-50`}>
-            <View style={tw`flex flex-row flex-wrap justify-center items-center py-4 `}>
+            <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
                 {general && general.map(({card,graph,dispositivoId},index)=><>
                     <View style={tw`flex flex-row  justify-evenly py-2`}>
                         <View>
@@ -286,7 +286,7 @@ function DetailScreen({ navigation }) {
                 </>)}
 
             </View>
-            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] `}>
+            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
                 <Button
                     color="#F08080"
                     title="Estadisticas"
