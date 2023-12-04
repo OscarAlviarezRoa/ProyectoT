@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { View, Text, Button,TextInput, StyleSheet } from 'react-native';
+import {View, Text, Button, TextInput, StyleSheet, Image} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useState } from "react"; 
 import { firebaseConfig} from "../services/firebase";
 import { collection, getFirestore, addDoc, getDocs, setDoc, doc } from 'firebase/firestore'
 import { initializeApp } from "firebase/app";
-
-
+import ImageHome from '../assets/home.jpeg'
+import tw from 'twrnc';
 
 
 //Real time database
@@ -78,118 +78,57 @@ const handleChangeText = (value, name)=> {
 
 }
 
-const saveProduct =async() => {
-    console.log(state)
 
-    try{
-        setBuscarProductos(true)
-        //const cityRef = doc(db, '/a0/b0/84:CC:A8:82:42:03', 'ReleSensor');
-        await setDoc(doc(db, "b0","84:0D:8E:A8:25:CE"), {
-          Sensor: 'A',
-        });
-        //await addDoc(collection(db, 'Dispositivos'),{...state})
-
-    }
-    catch{
-        console.error('error');
-        
-
-    }setBuscarProductos(false)
-  }
-    
-    const saveProduct2 =async() => {
-      console.log(state)
-  
-      try{
-          setBuscarProductos(true)
-          //const cityRef = doc(db, '/a0/b0/84:CC:A8:82:42:03', 'ReleSensor');
-          await setDoc(doc(db, "b0","84:0D:8E:A8:25:CE"), {
-            Sensor: 'B',
-          });
-          //await addDoc(collection(db, 'Dispositivos'),{...state})
-  
-      }
-      catch{
-          console.error('error');
-          
-  
-      }
-      setBuscarProductos(false)
-
-      
-}
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text></Text>
-      <View>
-        {/* <TextInput/> */}
-                {/* <TextInput 
-                    placeholder="Nombre"
-                    onChangeText={(value)=>handleChangeText(value,'nombre')}
-                    style = {styles.input}
-                    value={state.nombre}
-                />
-                <TextInput 
-                    placeholder="Consumo 15 h"
-                    onChangeText={(value)=>handleChangeText(value,'consumoh')}
-                    style = {styles.input}
-                    value={state.consumoh}
-                />
-                <TextInput 
-                    placeholder="Consumo Mensual"
-                    onChangeText={(value)=>handleChangeText(value,'consumom')}
-                    style = {styles.input}
-                    value={state.consumom}
-                />
-                <TextInput 
-                    placeholder="Promedio"
-                    onChangeText={(value)=>handleChangeText(value,'promedioh')}
-                    style = {styles.input}
-                    value={state.promedioh}
-                />
-                <TextInput 
-                    placeholder="Promedio Hora"
-                    onChangeText={(value)=>handleChangeText(value,'promedio')}
-                    style = {styles.input}
-                    value={state.promedio}
-                /> */}
-            </View>
-            <Button color="#F08080" title="Encender"
-                onPress = {saveProduct}
-            />
-            <Button color="#F08080" title="Apagar"
-                onPress = {saveProduct2}
-            />
+    <View style={styles.container}>
+        <Text style={tw`text-2xl sm:text-md text-gray-600 pt-2 px-2`}>Sistema de control de dispositivos electronicos</Text>
+      <View >
+          <Image style={styles.imagen} source={ImageHome}/>
+          <Button color="#F08080"
+                  title="Informe general"
+                  onPress={() => {
+                      console.log("Intentando navegar a DetailScreen");
+                      navigation.navigate('Detail');
+                  }}
+          />
+      </View>
 
-            <View style={styles.container}>
-                <Button title="Send Mail" onPress={handleEmail} />
-            </View>
-      <Button color="#F08080"
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-      <Button color="#F08080"
-        title="Go to Login"
-        onPress={() => navigation.navigate('Login')}
-      />
+
+
+
+        <View style={tw` flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
+            <Button color="#F08080"
+                    title="Control de dispositivos"
+                    onPress={() => navigation.navigate('Details')}
+            />
+            <Button color="#F08080"
+                    title="Go to Login"
+                    onPress={() => navigation.navigate('Login')}
+            />
+        </View>
     </View>
   );
 
-  
+
+
 }
 const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-    borderWidth: 1,
-    padding: 10,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
-}
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10,
+    },
+    imagen: {
+        width: 400,
+        height: 400,
+        resizeMode: 'cover',
+    },
 });
-
 export default HomeScreen;

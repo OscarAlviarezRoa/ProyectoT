@@ -16,7 +16,6 @@ import {
     StackedBarChart
 } from "react-native-chart-kit";
 
-// Realtime Database
 
 import { getDatabase } from "firebase/database";
 import { ref, set, onValue } from "firebase/database";
@@ -25,23 +24,15 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 
 
 const appFirebase = initializeApp(firebaseConfig)
-//const database = getDatabase(appFirebase)
 const db = getFirestore(appFirebase)
 
-//Realtime Database
 
-// const starCountRef = ref(database, 'posts/' + postId + '/starCount');
-// onValue(starCountRef, (snapshot) => {
-//   const data = snapshot.val();
-//   updateStarCount(postElement, data);
-// });
 
-//email
 import { useCookies } from "react-cookie";
 
 
 
-function DetailsScreen({ navigation }) {
+function DetailScreen({ navigation }) {
 
     //email
 
@@ -70,25 +61,10 @@ function DetailsScreen({ navigation }) {
 
     })
     useEffect (()=>{
-        // const startCountRef = ref(database, '/test');
-        // // const querySnapshot2 = getDocs(collection(database,'test')).then((Response)=>{
-        // //     console.log(Response)
-        // // })
-        // console.log(startCountRef);
-        // onValue(startCountRef, (snapshot)=> {
-        // const data = snapshot.val();
-        // const newPosts = Object.keys(data).map(key=> ({
-        //     id:key,
-        //     ...data[key]
-        // }));
-        // console.log(newPosts);
-        // console.log('error');
-        // setTodoData(newPosts);
-        // })
+
         calldb()
 
     },[])
-    //Realtime Database
 
 
 
@@ -97,7 +73,7 @@ function DetailsScreen({ navigation }) {
 
     const [lista,setLista] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
 
-
+    const [general,setGeneral ] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
     const [cookies,setCookie] = useCookies(["CookieIRMS"])
 
 
@@ -120,8 +96,6 @@ function DetailsScreen({ navigation }) {
                     }
                 });
                 let resultadosLista = []
-                let graphValues= []
-                const queryData =[]
                 dispositivos.map(async (dispositivo,index)=>{
                     try{
 
@@ -139,6 +113,7 @@ function DetailsScreen({ navigation }) {
                                 Potencia,
                                 myDouble3,
                             })
+                            
                         })
 
                         const resultado = [docs.reduce((acum,item)=>{
@@ -184,6 +159,36 @@ function DetailsScreen({ navigation }) {
         }
         setInterval(()=>getLista(),5000)
     },[])
+    useEffect(() => {
+        if( lista !==null){
+            const resumenGeneral = []
+
+            const resultado = lista.reduce((listaAcum,item)=>{
+                if(item.card.myDouble3> listaAcum.card.myDouble3){
+                    listaAcum = item
+                }
+                return listaAcum
+            },lista[0])
+
+
+
+
+            const sortValues = lista.sort(({card},{card:cardB})=> cardB.myDouble3-card.myDouble3).slice(0,10).map((item)=>item.graph)
+
+            const sortValues2 = sortValues.sort((a,b)=> a.myDouble3-b.myDouble3)
+            const graphGeneral = [].concat(...sortValues2);
+
+            resumenGeneral.push({
+                card:resultado.card,
+                graph: graphGeneral,
+                dispositivoId:''
+            })
+            console.log(lista)
+            console.log(resumenGeneral)
+            setGeneral(resumenGeneral)
+
+        }
+    }, [lista]);
     const OnButton = useCallback(async (dispositivo)=>{
         await setDoc(doc(db, "b0",dispositivo), {
             Sensor: 'A',
@@ -194,65 +199,51 @@ function DetailsScreen({ navigation }) {
             Sensor: 'B',
         });
     },[])
-
-    if(!lista){
+    if(!general){
         return <View style={tw`flex-1 items-center justify-center`}>
             <ActivityIndicator size="large" color="#F08080" />
         </View>
     }
 
+
+
     return (
         <View style={tw`flex-1 bg-red-50`}>
-            <View style={tw`flex flex-row flex-wrap justify-center items-center py-4`}>
-                {lista && lista.map(({card,graph,dispositivoId},index)=><>
+            <View style={tw`flex flex-row flex-wrap justify-center items-center py-4 `}>
+                {general && general.map(({card,graph,dispositivoId},index)=><>
                     <View style={tw`flex flex-row  justify-evenly py-2`}>
-                        <View style={tw`flex flex-col`}>
-                            <View style={tw`py-1`}>
-                                <Button  color="#F08080" title="Encender"
-                                         onPress = {()=>OnButton(dispositivoId)}
-                                />
-                            </View>
-
-                            <View style={tw`py-1`}>
-                                <Button color="#F08080" title="Apagar"
-                                        onPress = {()=>OffButton(dispositivoId)}
-                                />
-                            </View>
-
-                        </View>
                         <View>
                             <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
-                                    {
-                                        title:'Corriente',
-                                        readValue: card.IP,
-                                        isPositive: true,
+                                {
+                                    title:'Corriente',
+                                    readValue: card.IP,
+                                    isPositive: true,
 
-                                    },
-                                    {
-                                        title:'Potencia',
-                                        readValue:card.IRMS,
-                                        isPositive: true,
-                                    },
-                                    {
-                                        title:'Consumo',
-                                        readValue:card.Potencia,
-                                        isPositive: null,
-                                    },
-                                    {
-                                        title:'Consumo Periodo',
-                                        readValue:card.myDouble3,
-                                        isPositive: null,
-                                    }
-                                ]
-
-
+                                },
+                                {
+                                    title:'Potencia',
+                                    readValue:card.IRMS,
+                                    isPositive: true,
+                                },
+                                {
+                                    title:'Consumo',
+                                    readValue:card.Potencia,
+                                    isPositive: null,
+                                },
+                                {
+                                    title:'Consumo Periodo',
+                                    readValue:card.myDouble3,
+                                    isPositive: null,
+                                }
+                            ]
 
 
-                        }/>
+
+
+                            }/>
                         </View>
+
                     </View>
-
-
 
                     <LineChart
                         data={{
@@ -310,7 +301,6 @@ function DetailsScreen({ navigation }) {
                     style={tw`mb-2`}
                 />
             </View>
-
         </View>
     );
 }
@@ -319,4 +309,4 @@ function DetailsScreen({ navigation }) {
 
 //mostrar datos de los arreglos
 
-export default DetailsScreen;
+export default DetailScreen;
