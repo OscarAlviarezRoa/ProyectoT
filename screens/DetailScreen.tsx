@@ -162,14 +162,27 @@ function DetailScreen({ navigation }) {
     useEffect(() => {
         if( lista !==null){
             const resumenGeneral = []
+            let Potencia= 0
+            let IRMS = 0
+            let IP = 0
 
+            lista.map((item,index)=>{
+                if(typeof  item.card.Potencia ==='number'){
+                    Potencia =Potencia + item.card.Potencia
 
-            const resultado = lista.reduce((listaAcum,item)=>{
-                if(item.card.myDouble3> listaAcum.card.myDouble3){
-                    listaAcum = item
                 }
-                return listaAcum
-            },lista[0])
+                if(typeof  item.card.IRMS ==='number'){
+                    IRMS=IRMS + item.card.IRMS
+
+                }
+                if(typeof  item.card.IP ==='number'){
+                    IP=IP + item.card.IP
+
+                }
+
+            })
+
+
 
 
 
@@ -180,11 +193,36 @@ function DetailScreen({ navigation }) {
             const sortValues = lista.sort(({card},{card:cardB})=> cardB.myDouble3-card.myDouble3).slice(0,10).map((item)=>item.graph)
 
             const sortValues2 = sortValues.sort((a,b)=> a.myDouble3-b.myDouble3)
-            const graphGeneral = [].concat(...sortValues2);
+            console.log(sortValues2)
 
+            const promedio = Array.from({ length: sortValues2[0].length }, () => ({ IRMS: 0, myDouble3: 0 }));
+
+            sortValues2.forEach((graph) => {
+                graph.forEach((coordenada, index) => {
+                    promedio[index].IRMS += coordenada.IRMS;
+                    promedio[index].myDouble3 += coordenada.myDouble3;
+                });
+            });
+
+            const numGraphs = sortValues2.length;
+            promedio.forEach((coordenada) => {
+                coordenada.IRMS /= numGraphs;
+                coordenada.myDouble3 /= numGraphs;
+            });
+
+
+
+
+
+
+            let cardNew = {
+                Potencia,
+                IRMS,
+                IP
+            }
             resumenGeneral.push({
-                card:resultado.card,
-                graph: graphGeneral,
+                card:cardNew,
+                graph: promedio,
                 dispositivoId:''
             })
 
@@ -218,26 +256,22 @@ function DetailScreen({ navigation }) {
                         <View>
                             <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
                                 {
-                                    title:'Corriente',
+                                    title:'Corriente Max',
                                     readValue: card.IP,
                                     isPositive: true,
 
                                 },
                                 {
-                                    title:'Potencia',
+                                    title:'Corriente (s)',
                                     readValue:card.IRMS,
                                     isPositive: true,
                                 },
                                 {
-                                    title:'Consumo',
+                                    title:'Potencia',
                                     readValue:card.Potencia,
                                     isPositive: null,
                                 },
-                                {
-                                    title:'Consumo Periodo',
-                                    readValue:card.myDouble3,
-                                    isPositive: null,
-                                }
+
                             ]
 
 
