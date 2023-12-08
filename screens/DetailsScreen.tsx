@@ -24,6 +24,7 @@ import { ref, set, onValue } from "firebase/database";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
 import { ScrollView } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 
 const appFirebase = initializeApp(firebaseConfig)
@@ -45,159 +46,41 @@ import { useCookies } from "react-cookie";
 
 function DetailsScreen({ navigation }) {
 
-    //email
+    const [dispositivos,setDispositivos]= useState([])
+    const navigations = useNavigation()
 
-    const handleEmail = () => {
-        fetch("http://localhost:3000/sendEmail",{
-            method:"POST",
-            mode: "no-cors",
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            }
-        })
+  const showDevice = useCallback((dispositivo:string)=>{
+      navigations.navigate('Device',{
+          dispositivo
+      })
 
-    }
-
-    //Realtime Database
-
-    const [todoData,setTodoData] = useState([]);
-
-    const calldb = (async()=>{
-        const citiesCol = collection(db, 'test');
-        const citySnapshot = await getDocs(citiesCol);
-        const cityList = citySnapshot.docs.map(doc => doc.data());
-        setTodoData(cityList);
-
-
-
-    })
-    useEffect (()=>{
-        // const startCountRef = ref(database, '/test');
-        // // const querySnapshot2 = getDocs(collection(database,'test')).then((Response)=>{
-        // //     console.log(Response)
-        // // })
-        // console.log(startCountRef);
-        // onValue(startCountRef, (snapshot)=> {
-        // const data = snapshot.val();
-        // const newPosts = Object.keys(data).map(key=> ({
-        //     id:key,
-        //     ...data[key]
-        // }));
-        // console.log(newPosts);
-        // console.log('error');
-        // setTodoData(newPosts);
-        // })
-        calldb()
-
-    },[])
-    //Realtime Database
-
-
-
-
-
-
-    const [lista,setLista] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
-
-
-    const [cookies,setCookie] = useCookies(["CookieIRMS"])
-
-
-
-
-    const query = collection(db, "a0");
-
+  },[])
     useEffect(()=>{
 
         const getLista =async () => {
-            try{
-
-                const querySnapshot2 = await getDocs(collection(db, "a0"));
-
-                const dispositivos = []
-                querySnapshot2.forEach((doc) => {
-                    if (doc.id!=="b0"){
-                        dispositivos.push(doc.id)
-
-                    }
-                });
-                let resultadosLista = []
-                let graphValues= []
-                const queryData =[]
-                dispositivos.map(async (dispositivo,index)=>{
-                    try{
-
-                        const query =  await getDocs(collection(db, "a0", "b0",dispositivo))
-
-                        let docs = []
-                        query.forEach((doc)=>{
-                            const {IP,IRMS,Potencia,Caudal,Volumen,Consumo,myDouble3} = doc.data()
-                            docs.push({
-                                Caudal,
-                                Volumen,
-                                Consumo,
-                                IP,
-                                IRMS,
-                                Potencia,
-                                myDouble3,
-                            })
-                        })
-
-                        const resultado = [docs.reduce((acum,item)=>{
-                            if(item.myDouble3>acum.myDouble3){
-                                acum = item
-                            }
-                            return acum
-                        },docs[0])]
 
 
+            const querySnapshot2 = await getDocs(collection(db, "a0"));
 
-                        const sortValues = docs.sort((a,b)=> b.myDouble3-a.myDouble3).slice(0,10)
+            const dispositivos = []
+            querySnapshot2.forEach((doc) => {
+                if (doc.id!=="b0"){
+                    dispositivos.push(doc.id)
 
-                        const sortValues2 = sortValues.sort((a,b)=> a.myDouble3-b.myDouble3)
-                        resultadosLista.push({
-                            card:resultado[0],
-                            graph: sortValues2,
-                            dispositivoId:dispositivo
-                        })
-                        setLista(resultadosLista)
-
-
-                    }catch (e){
-                        console.log(e)
-                    }
-
-                })
+                }
+            });
+            setDispositivos(dispositivos)
 
 
 
 
-
-
-
-
-
-
-
-            }catch(error){
-                console.log(error)
-            }
 
         }
-        setInterval(()=>getLista(),5000)
-    },[])
-    const OnButton = useCallback(async (dispositivo)=>{
-        await setDoc(doc(db, "b0",dispositivo), {
-            Sensor: 'A',
-        });
-    },[])
-    const OffButton = useCallback(async (dispositivo)=>{
-        await setDoc(doc(db, "b0",dispositivo), {
-            Sensor: 'B',
-        });
+        getLista()
     },[])
 
-    if(!lista){
+
+    if(!dispositivos){
         return <View style={tw`flex-1 items-center justify-center`}>
             <ActivityIndicator size="large" color="#F08080" />
         </View>
@@ -206,97 +89,24 @@ function DetailsScreen({ navigation }) {
     return (
         <View style={tw`flex-1 bg-red-50`}>
             <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
-                <ScrollView>
-                {lista && lista.map(({card,graph,dispositivoId},index)=><View key={index}>
-                    <View style={tw`flex flex-row  justify-evenly py-2`}>
-                        <View style={tw`flex flex-row justify-evenly`}>
-                            <View>
-                                <View style={tw`py-1`}>
-                                    <Button  color="#F08080" title="Encender"
-                                             onPress = {()=>OnButton(dispositivoId)}
-                                    />
-                                </View>
 
-                                <View style={tw`py-1`}>
-                                    <Button color="#F08080" title="Apagar"
-                                            onPress = {()=>OffButton(dispositivoId)}
-                                    />
-                                </View>
+                {
+                    dispositivos && dispositivos.map(dispositivo=>(
+                        <View style={tw`flex `}>
+                            <View style={tw`px-2`}>
+                                <Button
+                                    onPress={()=>showDevice(dispositivo)}
+
+                                    color="#F08080"
+                                    title={dispositivo}/>
                             </View>
 
-                            <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
-                                {
-                                    title:'Corriente',
-                                    readValue: card.IP,
-                                    isPositive: true,
-
-                                },
-                                {
-                                    title:'Potencia',
-                                    readValue:card.IRMS,
-                                    isPositive: true,
-                                },
-                                {
-                                    title:'Consumo',
-                                    readValue:card.Potencia,
-                                    isPositive: null,
-                                },
-                                {
-                                    title:'Consumo Periodo',
-                                    readValue:card.myDouble3,
-                                    isPositive: null,
-                                }
-                            ]
 
 
 
-
-                            }/>
                         </View>
-
-                    </View>
-
-                    <LineChart
-                        data={{
-                            labels: graph.map(item=>item.myDouble3),
-                            datasets: [
-                                {
-                                    data: graph.map(item=>item.IRMS)
-                                }
-                            ]
-                        }}
-                        width={Dimensions.get("window").width} // from react-native
-                        height={220}
-                        yAxisLabel=""
-                        yAxisSuffix="mA"
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={{
-                            backgroundColor: "#F7F9F9",
-                            backgroundGradientFrom: "#F7F9F9",
-                            backgroundGradientTo: "#F7F9F9",
-                            decimalPlaces: 2, // optional, defaults to 2dp
-                            color: (opacity = 1) => "yellow",
-                            labelColor: (opacity = 1) => "black",
-                            style: {
-                                borderRadius: 16
-                            },
-                            propsForDots: {
-                                r: "6",
-                                strokeWidth: "2",
-                                stroke: "#ffa726"
-                            }
-                        }}
-                        bezier
-                        style={{
-                            marginVertical: 8,
-                            borderRadius:16
-                        }}
-                    />
-
-
-                </View>)}
-                </ScrollView>
-
+                    ))
+                }
             </View>
             <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
                 <Button

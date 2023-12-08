@@ -12,6 +12,7 @@ import HomeScreen from './screens/HomeScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import LoginScreen from './screens/LoginScreen';
 import DetailScreen from "./screens/DetailScreen";
+import DeviceScreen from "./screens/DeviceScreen";
 const Stack = createNativeStackNavigator();
 
 function App() {
@@ -31,6 +32,10 @@ function App() {
         headerTitleAlign:"center",
         }}/>
         <Stack.Screen name="Detail" component={DetailScreen} options={{statusBarColor:"#F08080", title:"Login",headerStyle:{backgroundColor:"#F08080"},
+          headerTintColor: "#fff",
+          headerTitleAlign:"center",
+        }}/>
+        <Stack.Screen name="Device" component={DeviceScreen} options={{statusBarColor:"#F08080", title:"Login",headerStyle:{backgroundColor:"#F08080"},
           headerTintColor: "#fff",
           headerTitleAlign:"center",
         }}/>

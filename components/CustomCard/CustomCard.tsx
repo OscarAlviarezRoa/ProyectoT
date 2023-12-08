@@ -7,7 +7,7 @@ export const CustomCard:React.FC<CustomCardProps>=({device, consumes,date,title,
     console.log(title)
     return (
     
-        <View style={tw`flex flex-row justify-evenly h-36 rounded`}>
+        <View style={tw`flex flex-row justify-evenly  rounded`}>
             <View style={tw`rounded-l-lg flex justify-center items-center bg-red-400 text-white font-bold px-2 py-2`}>
             <Text style={tw`text-white font-bold`}>{device}</Text>
         </View><View style={tw`flex flex-col px-2 justify-evenly w-5/6 bg-gray-50 rounded-r-lg`}>
