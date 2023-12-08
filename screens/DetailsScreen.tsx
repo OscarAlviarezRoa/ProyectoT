@@ -23,6 +23,8 @@ import { ref, set, onValue } from "firebase/database";
 
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
+import { ScrollView } from "react-native";
+
 
 const appFirebase = initializeApp(firebaseConfig)
 //const database = getDatabase(appFirebase)
@@ -204,6 +206,7 @@ function DetailsScreen({ navigation }) {
     return (
         <View style={tw`flex-1 bg-red-50`}>
             <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
+                <ScrollView>
                 {lista && lista.map(({card,graph,dispositivoId},index)=><View key={index}>
                     <View style={tw`flex flex-row  justify-evenly py-2`}>
                         <View style={tw`flex flex-row justify-evenly`}>
@@ -292,6 +295,7 @@ function DetailsScreen({ navigation }) {
 
 
                 </View>)}
+                </ScrollView>
 
             </View>
             <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
