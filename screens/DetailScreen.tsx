@@ -164,8 +164,6 @@ function DetailScreen({ navigation }) {
             const resumenGeneral = []
 
 
-
-
             const resultado = lista.reduce((listaAcum,item)=>{
                 if(item.card.myDouble3> listaAcum.card.myDouble3){
                     listaAcum = item
@@ -189,7 +187,6 @@ function DetailScreen({ navigation }) {
                 graph: graphGeneral,
                 dispositivoId:''
             })
-            console.log(lista)
 
             setGeneral(resumenGeneral)
 
@@ -216,7 +213,7 @@ function DetailScreen({ navigation }) {
     return (
         <View style={tw`flex-1 bg-red-50`}>
             <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
-                {general && general.map(({card,graph,dispositivoId},index)=><>
+                {general && general.map(({card,graph,dispositivoId},index)=><View key={index}>
                     <View key={index} style={tw`flex flex-row  justify-evenly py-2`}>
                         <View>
                             <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
@@ -289,7 +286,7 @@ function DetailScreen({ navigation }) {
                     />
 
 
-                </>)}
+                </View>)}
 
             </View>
             <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
