@@ -91,8 +91,8 @@ function DetailsScreen({ navigation }) {
             <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
 
                 {
-                    dispositivos && dispositivos.map(dispositivo=>(
-                        <View style={tw`flex `}>
+                    dispositivos && dispositivos.map((dispositivo,index)=>(
+                        <View key={index} style={tw`flex `}>
                             <View style={tw`px-2`}>
                                 <Button
                                     onPress={()=>showDevice(dispositivo)}
