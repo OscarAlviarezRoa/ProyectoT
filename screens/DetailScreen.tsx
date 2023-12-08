@@ -163,12 +163,18 @@ function DetailScreen({ navigation }) {
         if( lista !==null){
             const resumenGeneral = []
 
+
+
+
             const resultado = lista.reduce((listaAcum,item)=>{
                 if(item.card.myDouble3> listaAcum.card.myDouble3){
                     listaAcum = item
                 }
                 return listaAcum
             },lista[0])
+
+
+
 
 
 
@@ -184,7 +190,7 @@ function DetailScreen({ navigation }) {
                 dispositivoId:''
             })
             console.log(lista)
-            console.log(resumenGeneral)
+
             setGeneral(resumenGeneral)
 
         }
@@ -211,7 +217,7 @@ function DetailScreen({ navigation }) {
         <View style={tw`flex-1 bg-red-50`}>
             <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
                 {general && general.map(({card,graph,dispositivoId},index)=><>
-                    <View style={tw`flex flex-row  justify-evenly py-2`}>
+                    <View key={index} style={tw`flex flex-row  justify-evenly py-2`}>
                         <View>
                             <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
                                 {
