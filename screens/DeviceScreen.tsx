@@ -1,8 +1,8 @@
-import {View, Button, Text, Dimensions, ActivityIndicator} from "react-native";
+import {View, Button, Text, Dimensions, ActivityIndicator, TextInput, StyleSheet} from "react-native";
 import tw from 'twrnc';
 import { CustomCard } from "../components/CustomCard/CustomCard";
 import * as React from 'react';
-import {useCallback, useEffect} from 'react';
+import {ChangeEvent, useCallback, useEffect} from 'react';
 import { useState } from "react";
 import { firebaseConfig } from "../services/firebase";
 import { collection, getFirestore, addDoc, getDocs, query, orderBy, getDoc, doc,setDoc } from 'firebase/firestore'
@@ -51,6 +51,7 @@ function DeviceScreen({ navigation }) {
     const dispositivo = router.params.dispositivo
 
     const [dispositivoState ,setDispositivoState] = useState(router.params.dispositivo)
+    const [isLoading,setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
         setDispositivoState(dispositivo)
@@ -60,7 +61,11 @@ function DeviceScreen({ navigation }) {
 
 
 
-   const [intervalId,setIntervalId]= useState()
+    const [inputAlias,setInputAlias ] = useState()
+    const handlerAlias = useCallback((event:ChangeEvent<HTMLInputElement>)=>{
+        setInputAlias(event.target.value)
+    },[])
+
 
 
 
@@ -140,7 +145,7 @@ function DeviceScreen({ navigation }) {
         });
     },[])
 
-    if(!lista){
+    if(!lista || isLoading){
         return <View style={tw`flex-1 items-center justify-center`}>
             <ActivityIndicator size="large" color="#7ACFFF" />
         </View>
@@ -167,6 +172,7 @@ function DeviceScreen({ navigation }) {
                                             />
                                         </View>
                                     </View>
+
 
                                     <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
                                         {
@@ -236,6 +242,25 @@ function DeviceScreen({ navigation }) {
                                     borderRadius:16
                                 }}
                             />
+                            <View style={tw`flex flex-row justify-center`}>
+                                <View>
+                                    <TextInput onChange={handlerAlias} style={styles.input} />
+                                    <Button
+                                        color="#7ACFFF"
+                                        title='agregar alias al dispositivo'
+                                        onPress={ ()=>{
+                                            setIsLoading(true)
+
+                                            setDoc(doc(db, "c0",dispositivo), {
+                                                alias: inputAlias,
+                                                dispositivo
+                                            }).then(()=>setIsLoading(false));
+                                        }}
+                                        style={tw`mb-2`}
+                                    />
+
+                                </View>
+                            </View>
 
 
                         </View>)}
@@ -267,5 +292,19 @@ function DeviceScreen({ navigation }) {
 //lista
 
 //mostrar datos de los arreglos
+const styles = StyleSheet.create({
+    input: {
+        height: 40,
+        margin: 12,
+        width:180,
+        borderWidth: 1,
+        padding: 10,
+        backgroundColor:'white',
+        borderStyle:'solid',
+        borderColor:'#7ACFFF',
+        borderRadius:8,
 
+
+    },
+});
 export default DeviceScreen;

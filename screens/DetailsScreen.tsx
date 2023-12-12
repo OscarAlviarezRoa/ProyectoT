@@ -46,7 +46,7 @@ import { useCookies } from "react-cookie";
 
 function DetailsScreen({ navigation }) {
 
-    const [dispositivos,setDispositivos]= useState([])
+    const [dispositivos,setDispositivos]= useState(null)
     const navigations = useNavigation()
 
   const showDevice = useCallback((dispositivo:string)=>{
@@ -58,14 +58,29 @@ function DetailsScreen({ navigation }) {
     useEffect(()=>{
 
         const getLista =async () => {
-
+             const device = []
 
             const querySnapshot2 = await getDocs(collection(db, "a0"));
+            const querySnapshot3= await getDocs(collection(db, "c0"));
+            querySnapshot3.forEach((doc)=>{
+
+                device.push(
+                    {
+                        dispositivo: doc.id,
+                        alias:doc.data().alias
+                    }
+                )
+            })
+
 
             const dispositivos = []
             querySnapshot2.forEach((doc) => {
                 if (doc.id!=="b0"){
-                    dispositivos.push(doc.id)
+                    const findAlias= device.find((item)=> item.dispositivo == doc.id);
+                    dispositivos.push({
+                        dispositivo:doc.id,
+                        alias: findAlias?.alias ?? doc.id
+                    })
 
                 }
             });
@@ -102,7 +117,7 @@ function DetailsScreen({ navigation }) {
             <View style={tw`flex flex-1 flex-col justify-center items-center py-4`}>
 
                 {
-                    dispositivos && dispositivos.map((dispositivo,index)=>(
+                    dispositivos && dispositivos.map(({dispositivo, alias},index)=>(
                         <View key={index} style={tw`flex py-2`}>
 
                             <View style={tw`px-2 flex flex-row`}>
@@ -110,13 +125,9 @@ function DetailsScreen({ navigation }) {
                                     onPress={()=>showDevice(dispositivo)}
 
                                     color="#7ACFFF"
-                                    title={dispositivo}/>
+                                    title={alias}/>
                                 <View style={tw`px-2`}>
-                                <Button
-                                    onPress={()=>showDevice(dispositivo)}
 
-                                    color="#7ACFFF"
-                                    title="..."/>
                                     </View>
                             </View>
                         </View>
