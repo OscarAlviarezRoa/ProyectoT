@@ -142,7 +142,7 @@ function DeviceScreen({ navigation }) {
 
     if(!lista){
         return <View style={tw`flex-1 items-center justify-center`}>
-            <ActivityIndicator size="large" color="#F08080" />
+            <ActivityIndicator size="large" color="#7ACFFF" />
         </View>
     }
 
@@ -155,14 +155,14 @@ function DeviceScreen({ navigation }) {
                             <View style={tw`flex flex-row  justify-evenly py-2`}>
                                 <View style={tw`flex flex-row justify-evenly`}>
                                     <View>
-                                        <View style={tw`py-1`}>
-                                            <Button  color="#F08080" title="Encender"
+                                        <View style={tw`py-2 px-4`}>
+                                            <Button  color="#7ACFFF" title="Encender"
                                                      onPress = {()=>OnButton(dispositivoId)}
                                             />
                                         </View>
 
-                                        <View style={tw`py-1`}>
-                                            <Button color="#F08080" title="Apagar"
+                                        <View style={tw`py-2 px-4`}>
+                                            <Button color="#7ACFFF" title="Apagar"
                                                     onPress = {()=>OffButton(dispositivoId)}
                                             />
                                         </View>
@@ -242,9 +242,9 @@ function DeviceScreen({ navigation }) {
                 </ScrollView>
 
             </View>
-            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
+            <View style={tw`flex flex-row justify-evenly w-full bg-[#7ACFFF] py-2 `}>
                 <Button
-                    color="#F08080"
+                    color="#7ACFFF"
                     title="Estadisticas"
                     onPress={() => {
 
@@ -254,7 +254,7 @@ function DeviceScreen({ navigation }) {
                 />
 
                 <Button
-                    color="#F08080"
+                    color="#7ACFFF"
                     title="Go to Home"
                     onPress={() => navigation.navigate('Home')}
                     style={tw`mb-2`}

@@ -19,23 +19,23 @@ function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} options={{statusBarColor:"#F08080", title:"Inicio",headerStyle:{backgroundColor:"#F08080"},
+        <Stack.Screen name="Home" component={HomeScreen} options={{statusBarColor:"#7ACFFF", title:"Inicio",headerStyle:{backgroundColor:"#7ACFFF"},
         headerTintColor: "#fff",
         headerTitleAlign:"center",
         }}/>
-        <Stack.Screen name="Details" component={DetailsScreen} options={{statusBarColor:"#F08080", title:"Detalles",headerStyle:{backgroundColor:"#F08080"},
+        <Stack.Screen name="Details" component={DetailsScreen} options={{statusBarColor:"#7ACFFF", title:"Detalles",headerStyle:{backgroundColor:"#7ACFFF"},
         headerTintColor: "#fff",
         headerTitleAlign:"center",
         }}/>
-        <Stack.Screen name="Login" component={LoginScreen} options={{statusBarColor:"#F08080", title:"Login",headerStyle:{backgroundColor:"#F08080"},
+        <Stack.Screen name="Login" component={LoginScreen} options={{statusBarColor:"#7ACFFF", title:"Login",headerStyle:{backgroundColor:"#7ACFFF"},
         headerTintColor: "#fff",
         headerTitleAlign:"center",
         }}/>
-        <Stack.Screen name="Detail" component={DetailScreen} options={{statusBarColor:"#F08080", title:"Login",headerStyle:{backgroundColor:"#F08080"},
+        <Stack.Screen name="Detail" component={DetailScreen} options={{statusBarColor:"#7ACFFF", title:"Login",headerStyle:{backgroundColor:"#7ACFFF"},
           headerTintColor: "#fff",
           headerTitleAlign:"center",
         }}/>
-        <Stack.Screen name="Device" component={DeviceScreen} options={{statusBarColor:"#F08080", title:"Login",headerStyle:{backgroundColor:"#F08080"},
+        <Stack.Screen name="Device" component={DeviceScreen} options={{statusBarColor:"#7ACFFF", title:"Login",headerStyle:{backgroundColor:"#7ACFFF"},
           headerTintColor: "#fff",
           headerTitleAlign:"center",
         }}/>

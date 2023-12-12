@@ -84,7 +84,7 @@ const handleChangeText = (value, name)=> {
         <Text style={tw`text-2xl sm:text-md text-gray-600 pt-2 px-2`}>Sistema de control de dispositivos electronicos</Text>
       <View >
           <Image style={styles.imagen} source={ImageHome}/>
-          <Button color="#F08080"
+          <Button color="#7ACFFF"
                   title="Informe general"
                   onPress={() => {
                       console.log("Intentando navegar a DetailScreen");
@@ -96,12 +96,12 @@ const handleChangeText = (value, name)=> {
 
 
 
-        <View style={tw` flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
-            <Button color="#F08080"
+        <View style={tw` flex flex-row justify-evenly w-full bg-[#7ACFFF] py-2 `}>
+            <Button color="#7ACFFF"
                     title="Control de dispositivos"
                     onPress={() => navigation.navigate('Details')}
             />
-            <Button color="#F08080"
+            <Button color="#7ACFFF"
                     title="Go to Login"
                     onPress={() => navigation.navigate('Login')}
             />

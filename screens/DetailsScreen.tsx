@@ -79,45 +79,60 @@ function DetailsScreen({ navigation }) {
         getLista()
     },[])
 
+    const OnButton = useCallback(async (dispositivo)=>{
+        await setDoc(doc(db, "b0",dispositivo), {
+            Sensor: 'A',
+        });
+    },[])
+    const OffButton = useCallback(async (dispositivo)=>{
+        await setDoc(doc(db, "b0",dispositivo), {
+            Sensor: 'B',
+        });
+    },[])
+
 
     if(!dispositivos){
         return <View style={tw`flex-1 items-center justify-center`}>
-            <ActivityIndicator size="large" color="#F08080" />
+            <ActivityIndicator size="large" color="#7ACFFF" />
         </View>
     }
 
     return (
         <View style={tw`flex-1 bg-red-50`}>
-            <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
+            <View style={tw`flex flex-1 flex-col justify-center items-center py-4`}>
 
                 {
                     dispositivos && dispositivos.map((dispositivo,index)=>(
-                        <View key={index} style={tw`flex `}>
-                            <View style={tw`px-2`}>
+                        <View key={index} style={tw`flex py-2`}>
+
+                            <View style={tw`px-2 flex flex-row`}>
                                 <Button
                                     onPress={()=>showDevice(dispositivo)}
 
-                                    color="#F08080"
+                                    color="#7ACFFF"
                                     title={dispositivo}/>
+                                <View style={tw`px-2`}>
+                                <Button
+                                    onPress={()=>showDevice(dispositivo)}
+
+                                    color="#7ACFFF"
+                                    title="..."/>
+                                    </View>
                             </View>
-
-
-
-
                         </View>
                     ))
                 }
             </View>
-            <View style={tw`flex flex-row justify-evenly w-full bg-[#F08080] py-2 `}>
+            <View style={tw`flex flex-row justify-evenly w-full bg-[#7ACFFF] py-2 `}>
                 <Button
-                    color="#F08080"
+                    color="#7ACFFF"
                     title="Estadisticas"
                     onPress={() => navigation.push('Details')}
                     style={tw`mb-2`}
                 />
 
                 <Button
-                    color="#F08080"
+                    color="#7ACFFF"
                     title="Go to Home"
                     onPress={() => navigation.navigate('Home')}
                     style={tw`mb-2`}

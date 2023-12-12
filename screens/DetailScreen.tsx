@@ -268,7 +268,7 @@ function DetailScreen({ navigation }) {
                                 },
                                 {
                                     title:'Potencia',
-                                    readValue:card.Potencia,
+                                    readValue:1,
                                     isPositive: null,
                                 },
 
