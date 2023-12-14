@@ -152,8 +152,8 @@ function DeviceScreen({ navigation }) {
     }
 
     return (
-        <View style={tw`flex-1 bg-red-50`}>
-            <View style={tw`flex flex-1 flex-row flex-wrap justify-center items-center py-4 `}>
+        <View style={tw`flex-1 bg-[#F7F7F7]`}>
+            <View style={tw`flex flex-1 flex-row justify-center items-center py-4 `}>
                 <ScrollView>
                     {lista && lista.map(({card,graph,dispositivoId},index)=>
                         <View key={index}>
@@ -176,23 +176,23 @@ function DeviceScreen({ navigation }) {
 
                                     <CustomCard key={index} device={card.nombre} title='Lectura' date={new Date()} total={card.myDouble3} consumes={[
                                         {
-                                            title:'Corriente',
+                                            title:'Corriente PEAK',
                                             readValue: card.IP,
                                             isPositive: true,
 
                                         },
                                         {
-                                            title:'Potencia',
+                                            title:'Corriente (S)',
                                             readValue:card.IRMS,
                                             isPositive: true,
                                         },
                                         {
-                                            title:'Consumo',
+                                            title:'Potencia (W)',
                                             readValue:card.Potencia,
                                             isPositive: null,
                                         },
                                         {
-                                            title:'Consumo Periodo',
+                                            title:'Numero de Medicion',
                                             readValue:card.myDouble3,
                                             isPositive: null,
                                         }
@@ -205,7 +205,7 @@ function DeviceScreen({ navigation }) {
                                 </View>
 
                             </View>
-
+                            <View style={tw`items-center`}>
                             <LineChart
                                 data={{
                                     labels: graph.map(item=>item.myDouble3),
@@ -215,17 +215,17 @@ function DeviceScreen({ navigation }) {
                                         }
                                     ]
                                 }}
-                                width={Dimensions.get("window").width} // from react-native
+                                width={360} // from react-native
                                 height={220}
                                 yAxisLabel=""
                                 yAxisSuffix="mA"
                                 yAxisInterval={1} // optional, defaults to 1
                                 chartConfig={{
-                                    backgroundColor: "#F7F9F9",
-                                    backgroundGradientFrom: "#F7F9F9",
-                                    backgroundGradientTo: "#F7F9F9",
+                                    backgroundColor: "white",
+                                    backgroundGradientFrom: "white",
+                                    backgroundGradientTo: "white",
                                     decimalPlaces: 2, // optional, defaults to 2dp
-                                    color: (opacity = 1) => "yellow",
+                                    color: (opacity = 1) => "#7ACFFF",
                                     labelColor: (opacity = 1) => "black",
                                     style: {
                                         borderRadius: 16
@@ -233,7 +233,7 @@ function DeviceScreen({ navigation }) {
                                     propsForDots: {
                                         r: "6",
                                         strokeWidth: "2",
-                                        stroke: "#ffa726"
+                                        stroke: "#7ACFFF"
                                     }
                                 }}
                                 bezier
@@ -242,8 +242,9 @@ function DeviceScreen({ navigation }) {
                                     borderRadius:16
                                 }}
                             />
+                            </View>
                             <View style={tw`flex flex-row justify-center`}>
-                                <View>
+                                <View style={tw`items-center`}>
                                     <TextInput onChange={handlerAlias} style={styles.input} />
                                     <Button
                                         color="#7ACFFF"

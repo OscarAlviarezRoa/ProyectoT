@@ -35,7 +35,7 @@ function App() {
           headerTintColor: "#fff",
           headerTitleAlign:"center",
         }}/>
-        <Stack.Screen name="Device" component={DeviceScreen} options={{statusBarColor:"#7ACFFF", title:"Login",headerStyle:{backgroundColor:"#7ACFFF"},
+        <Stack.Screen name="Device" component={DeviceScreen} options={{statusBarColor:"#7ACFFF", title:"Gestion de Dispositivos",headerStyle:{backgroundColor:"#7ACFFF"},
           headerTintColor: "#fff",
           headerTitleAlign:"center",
         }}/>
