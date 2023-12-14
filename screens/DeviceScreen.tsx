@@ -64,9 +64,7 @@ function DeviceScreen({ navigation }) {
              method:'POST'
          })
      },[])
-    useEffect(() => {
-        handlerSendEmail()
-    }, []);
+
 
 
     const [inputAlias,setInputAlias ] = useState()
@@ -107,6 +105,14 @@ function DeviceScreen({ navigation }) {
                     }
                     return acum
                 },docs[0])]
+                const data = await getDoc(doc(db,'d0',dispositivo))
+
+                if(resultado[0].IRMS > 50 || resultado[0].IRMS < 20  && data.data()?.status !=='blocked'  ){
+                    handlerSendEmail()
+                    setDoc(doc(db, "d0",dispositivo), {
+                        status:'blocked'
+                    })
+                }
 
 
 
