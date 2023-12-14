@@ -62,8 +62,8 @@ function DeviceScreen({ navigation }) {
 
 
     const [inputAlias,setInputAlias ] = useState()
-    const handlerAlias = useCallback((event:ChangeEvent<HTMLInputElement>)=>{
-        setInputAlias(event.target.value)
+    const handlerAlias = useCallback((text)=>{
+        setInputAlias(text)
     },[])
 
 
@@ -244,7 +244,11 @@ function DeviceScreen({ navigation }) {
                             />
                             <View style={tw`flex flex-row justify-center`}>
                                 <View>
-                                    <TextInput onChange={handlerAlias} style={styles.input} />
+                                    <TextInput
+                                        onChangeText={handlerAlias}
+                                        value={inputAlias}
+                                        style={styles.input}
+                                    />
                                     <Button
                                         color="#7ACFFF"
                                         title='agregar alias al dispositivo'
