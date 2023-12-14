@@ -53,12 +53,20 @@ function DeviceScreen({ navigation }) {
     const [dispositivoState ,setDispositivoState] = useState(router.params.dispositivo)
     const [isLoading,setIsLoading] = useState<boolean>(false)
 
+
     useEffect(() => {
         setDispositivoState(dispositivo)
         setLista(null)
     }, [dispositivo]);
     const [lista,setLista] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
-
+     const handlerSendEmail= useCallback(async()=>{
+         await fetch('http://localhost:3000/sendMail',{
+             method:'POST'
+         })
+     },[])
+    useEffect(() => {
+        handlerSendEmail()
+    }, []);
 
 
     const [inputAlias,setInputAlias ] = useState()
