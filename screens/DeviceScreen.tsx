@@ -107,18 +107,17 @@ function DeviceScreen({ navigation }) {
                 },docs[0])]
                 const data = await getDoc(doc(db,'d0',dispositivo))
                 console.log(data.data()?.status)
-                if((resultado[0].IRMS > 50 || resultado[0].IRMS < 20)  && data.data()?.status !=='blocked'  ){
+                if((resultado[0].IRMS > 50 || resultado[0].IRMS < 20)  &&  data.data()?.status !=='blocked'  ){
                     handlerSendEmail()
                     console.log("Correo enviado")
-                    setDoc(doc(db, "d0",dispositivo), {
+                   await setDoc(doc(db, "d0",dispositivo), {
                         status:'blocked'
                     })
-                }else if((resultado[0].IRMS < 50 || resultado[0].IRMS > 20) && data.data()?.status ==='blocked'){
-                    console.log(resultado[0])
-                    setDoc(doc(db, "d0",dispositivo), {
+                }
+                if(resultado[0].IRMS < 50 && resultado[0].IRMS > 20 && data.data()?.status ==='blocked'){
+                    await  setDoc(doc(db, "d0",dispositivo), {
                         status:'DISBLOQUEATED'
                     })
-
                 }
 
 
