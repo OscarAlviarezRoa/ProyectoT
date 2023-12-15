@@ -62,7 +62,10 @@ function DeviceScreen({ navigation }) {
      const handlerSendEmail= useCallback(async(request)=>{
          await fetch('http://localhost:3000/sendEmail',{
              method:'POST',
-             body: request
+             body: request,
+             headers:{
+                 "Content-Type": "application/json",
+             }
          })
      },[])
 
