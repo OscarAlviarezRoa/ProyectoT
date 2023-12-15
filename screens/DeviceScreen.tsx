@@ -49,6 +49,7 @@ function DeviceScreen({ navigation }) {
     //email
     const router = useRoute()
     const dispositivo = router.params.dispositivo
+    const alias = router.params.alias
 
     const [dispositivoState ,setDispositivoState] = useState(router.params.dispositivo)
     const [isLoading,setIsLoading] = useState<boolean>(false)
@@ -114,6 +115,7 @@ function DeviceScreen({ navigation }) {
                 if((resultado[0].IRMS > 50 || resultado[0].IRMS < 20)  &&  data.data()?.status !=='blocked'  ){
                     handlerSendEmail({
                         dispositivo,
+                        alias,
                         IRMS: resultado[0].IRMS,
                         message: resultado[0].IRMS > 50 ? 'Has superado el maximo': 'Has disminuido el minimo'
                     })

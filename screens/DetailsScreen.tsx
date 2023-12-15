@@ -49,9 +49,10 @@ function DetailsScreen({ navigation }) {
     const [dispositivos,setDispositivos]= useState(null)
     const navigations = useNavigation()
 
-  const showDevice = useCallback((dispositivo:string)=>{
+  const showDevice = useCallback((dispositivo:string,alias:string)=>{
       navigations.navigate('Device',{
-          dispositivo
+          dispositivo,
+          alias
       })
 
   },[])
@@ -122,7 +123,7 @@ function DetailsScreen({ navigation }) {
 
                             <View style={tw`px-2 flex flex-row`}>
                                 <Button
-                                    onPress={()=>showDevice(dispositivo)}
+                                    onPress={()=>showDevice(dispositivo,alias)}
 
                                     color="#7ACFFF"
                                     title={alias}/>
