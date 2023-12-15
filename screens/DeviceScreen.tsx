@@ -60,7 +60,7 @@ function DeviceScreen({ navigation }) {
     }, [dispositivo]);
     const [lista,setLista] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
      const handlerSendEmail= useCallback(async()=>{
-         await fetch('http://localhost:3000/sendMail',{
+         await fetch('http://localhost:3000/sendEmail',{
              method:'POST'
          })
      },[])
@@ -106,12 +106,19 @@ function DeviceScreen({ navigation }) {
                     return acum
                 },docs[0])]
                 const data = await getDoc(doc(db,'d0',dispositivo))
-
-                if(resultado[0].IRMS > 50 || resultado[0].IRMS < 20  && data.data()?.status !=='blocked'  ){
+                console.log(data.data()?.status)
+                if((resultado[0].IRMS > 50 || resultado[0].IRMS < 20)  && data.data()?.status !=='blocked'  ){
                     handlerSendEmail()
+                    console.log("Correo enviado")
                     setDoc(doc(db, "d0",dispositivo), {
                         status:'blocked'
                     })
+                }else if((resultado[0].IRMS < 50 || resultado[0].IRMS > 20) && data.data()?.status ==='blocked'){
+                    console.log(resultado[0])
+                    setDoc(doc(db, "d0",dispositivo), {
+                        status:'DISBLOQUEATED'
+                    })
+
                 }
 
 
