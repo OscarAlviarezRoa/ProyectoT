@@ -59,9 +59,10 @@ function DeviceScreen({ navigation }) {
         setLista(null)
     }, [dispositivo]);
     const [lista,setLista] = useState<Array<{card:{}, graph:[], dispositivoId:string | number}> | null>(null)
-     const handlerSendEmail= useCallback(async()=>{
+     const handlerSendEmail= useCallback(async(request)=>{
          await fetch('http://localhost:3000/sendEmail',{
-             method:'POST'
+             method:'POST',
+             body: request
          })
      },[])
 
@@ -108,7 +109,11 @@ function DeviceScreen({ navigation }) {
                 const data = await getDoc(doc(db,'d0',dispositivo))
                 console.log(data.data()?.status)
                 if((resultado[0].IRMS > 50 || resultado[0].IRMS < 20)  &&  data.data()?.status !=='blocked'  ){
-                    handlerSendEmail()
+                    handlerSendEmail({
+                        dispositivo,
+                        IRMS: resultado[0].IRMS,
+                        message: resultado[0].IRMS > 50 ? 'Has superado el maximo': 'Has disminuido el minimo'
+                    })
                     console.log("Correo enviado")
                    await setDoc(doc(db, "d0",dispositivo), {
                         status:'blocked'
